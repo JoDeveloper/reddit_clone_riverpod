@@ -38,6 +38,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.0.15
   flutter_riverpod: ^2.1.1
+  firebase_core: ^2.3.0
+  firebase_storage: ^11.0.6
+  cloud_firestore: ^4.1.0
+  google_sign_in: ^5.4.2
+  firebase_auth: ^4.1.4
+  fpdart: ^0.3.0
+  routemaster: ^1.0.1
 
 dev_dependencies:
   flutter_test:
