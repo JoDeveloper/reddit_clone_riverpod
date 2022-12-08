@@ -10,14 +10,16 @@ import 'package:reddit_clone_riverpod/core/providers/firebase_providers.dart';
 import 'package:reddit_clone_riverpod/core/type_def.dart';
 import 'package:reddit_clone_riverpod/models/user_model.dart';
 
+/// Creating a provider for AuthRepository.
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(
-    firestore: ref.read(fireStorageProvider),
+    firestore: ref.read(fireFirestoreProvider),
     auth: ref.read(firebaseAuthProvider),
     googleSignIn: ref.read(googleSignInProvider),
   );
 });
 
+/// > This class is responsible for authenticating the user
 class AuthRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _firebaseAuth;
@@ -28,10 +30,16 @@ class AuthRepository {
         _firestore = firestore,
         _googleSignIn = googleSignIn;
 
+  /// A getter that returns a collection reference to the users collection.
   CollectionReference get _users => _firestore.collection(FireBaseConsts.usersCollection);
 
+  /// A getter that returns a stream of the user.
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
+  /// It signs in with google, gets the user's data, and returns it
+  ///
+  /// Returns:
+  ///   Either<Failer, UserModel>
   FutureEither<UserModel> signInWithGoogle() async {
     try {
       final googleAccount = await _googleSignIn.signIn();
@@ -68,5 +76,9 @@ class AuthRepository {
     }
   }
 
+  /// It returns a stream of the user data.
+  ///
+  /// Args:
+  ///   uid (String): The user's unique ID.
   Stream<UserModel> getUserData(String uid) => _users.doc(uid).snapshots().map((event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
 }

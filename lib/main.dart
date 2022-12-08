@@ -7,7 +7,7 @@ import 'package:reddit_clone_riverpod/core/common/loader.dart';
 import 'package:reddit_clone_riverpod/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone_riverpod/firebase_options.dart';
 import 'package:reddit_clone_riverpod/models/user_model.dart';
-import 'package:reddit_clone_riverpod/router.dart';
+import 'package:reddit_clone_riverpod/route.dart';
 import 'package:routemaster/routemaster.dart';
 
 void main() async {

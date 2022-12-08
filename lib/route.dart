@@ -1,6 +1,7 @@
 // loggedOut Routes
 import 'package:flutter/material.dart';
 import 'package:reddit_clone_riverpod/features/auth/screen/login_screen.dart';
+import 'package:reddit_clone_riverpod/features/community/screens/community_screen.dart';
 import 'package:reddit_clone_riverpod/features/community/screens/create_community_screen.dart';
 import 'package:reddit_clone_riverpod/features/home/screen/home_screen.dart';
 import 'package:routemaster/routemaster.dart';
@@ -16,10 +17,15 @@ final loggedInRoute = RouteMap(
   routes: {
     RouteNames.home: (_) => const MaterialPage(child: HomeScreen()),
     RouteNames.createCommunity: (_) => const MaterialPage(child: CreateCommunityScreen()),
+    RouteNames.communityScreen: (route) => MaterialPage(
+            child: CommunityScreen(
+          communityName: route.pathParameters['name']!,
+        )),
   },
 );
 
 abstract class RouteNames {
   static String home = '/';
-  static String createCommunity = '/';
+  static String communityScreen = '/r/:name';
+  static String createCommunity = '/create-community';
 }

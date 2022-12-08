@@ -9,7 +9,7 @@ final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
 });
 
 /// Creating a provider for FirebaseFirestore.
-final fireStorageProvider = Provider<FirebaseFirestore>((ref) {
+final fireFirestoreProvider = Provider<FirebaseFirestore>((ref) {
   return FirebaseFirestore.instance;
 });
 

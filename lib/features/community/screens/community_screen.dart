@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CommunityScreen extends ConsumerStatefulWidget {
-  const CommunityScreen({super.key});
+class CommunityScreen extends ConsumerWidget {
+  const CommunityScreen({
+    Key? key,
+    required this.communityName,
+  }) : super(key: key);
 
+  final String communityName;
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _CommunityScreenState();
-}
-
-class _CommunityScreenState extends ConsumerState<CommunityScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold();
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('CommunityScreen')),
+      body: const Center(
+        child: Text('CommunityScreen'),
+      ),
+    );
   }
 }
