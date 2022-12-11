@@ -23,8 +23,8 @@ class CommunityListDrawer extends ConsumerWidget {
   /// Args:
   ///   id (String): The id of the community you want to navigate to.
   ///   context (BuildContext): The context of the widget that is calling the function.
-  void navigateToCommunityScreen(String id, BuildContext context) {
-    Routemaster.of(context).push(RouteNames.communityScreen);
+  void navigateToCommunityScreen(String name, BuildContext context) {
+    Routemaster.of(context).push('/r/$name');
   }
 
   @override
@@ -47,7 +47,7 @@ class CommunityListDrawer extends ConsumerWidget {
                         return ListTile(
                           title: Text('r/${comunity.name}'),
                           leading: CircleAvatar(backgroundImage: NetworkImage(comunity.avatar)),
-                          onTap: () => navigateToCommunityScreen(comunity.id, context),
+                          onTap: () => navigateToCommunityScreen(comunity.name, context),
                         );
                       }),
                     ),
