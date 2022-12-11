@@ -21,7 +21,7 @@ class CommunityScreen extends ConsumerWidget {
     final user = ref.watch(userProvider)!;
     return Scaffold(
       appBar: AppBar(title: Text('r/$communityName')),
-      body: ref.watch(getCommunitybyNameProvider(communityName)).when(
+      body: ref.watch(getCommunityByNameProvider(communityName)).when(
             data: (community) {
               return _Community(community: community, user: user);
             },
@@ -32,7 +32,7 @@ class CommunityScreen extends ConsumerWidget {
   }
 }
 
-class _Community extends StatelessWidget {
+class _Community extends ConsumerWidget {
   const _Community({
     Key? key,
     required this.community,
@@ -47,7 +47,7 @@ class _Community extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return NestedScrollView(
       headerSliverBuilder: ((context, innerBoxIsScrolled) {
         return [
@@ -98,19 +98,25 @@ class _Community extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                padding: const EdgeInsets.symmetric(horizontal: 25),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
                               ),
                               child: const Text('Mod Tools'),
                             )
                           : OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () => ref
+                                  .watch(communityControllerProvider.notifier)
+                                  .joinOrLeaveCommunity(community,context),
                               style: OutlinedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                padding: const EdgeInsets.symmetric(horizontal: 25),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
                               ),
-                              child: community.members.contains(user.uid) ? const Text('JOINED') : const Text('JOIN'),
+                              child: community.members.contains(user.uid)
+                                  ? const Text('JOINED')
+                                  : const Text('JOIN'),
                             )
                     ],
                   ),

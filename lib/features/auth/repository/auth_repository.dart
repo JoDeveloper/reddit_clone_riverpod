@@ -25,13 +25,17 @@ class AuthRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
 
-  AuthRepository({required FirebaseFirestore firestore, required FirebaseAuth auth, required GoogleSignIn googleSignIn})
+  AuthRepository(
+      {required FirebaseFirestore firestore,
+      required FirebaseAuth auth,
+      required GoogleSignIn googleSignIn})
       : _firebaseAuth = auth,
         _firestore = firestore,
         _googleSignIn = googleSignIn;
 
   /// A getter that returns a collection reference to the users collection.
-  CollectionReference get _users => _firestore.collection(FireBaseConsts.usersCollection);
+  CollectionReference get _users =>
+      _firestore.collection(FireBaseConsts.usersCollection);
 
   /// A getter that returns a stream of the user.
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
@@ -51,7 +55,8 @@ class AuthRepository {
         idToken: userAuthintication?.idToken,
       );
 
-      final userCredential = await _firebaseAuth.signInWithCredential(credential);
+      final userCredential =
+          await _firebaseAuth.signInWithCredential(credential);
       UserModel user;
       if (userCredential.additionalUserInfo!.isNewUser) {
         user = UserModel(
@@ -80,5 +85,13 @@ class AuthRepository {
   ///
   /// Args:
   ///   uid (String): The user's unique ID.
-  Stream<UserModel> getUserData(String uid) => _users.doc(uid).snapshots().map((event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
+  Stream<UserModel> getUserData(String uid) => _users
+      .doc(uid)
+      .snapshots()
+      .map((event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
+
+  Future<void> signOut()async {
+    await _googleSignIn.signOut();
+    await _firebaseAuth.signOut();
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 /// It hides the current snackbar, if any, and shows a new snackbar with the given text
@@ -13,4 +14,12 @@ void showSnackBar(BuildContext context, String text) {
         content: Text(text),
       ),
     );
+}
+
+Future<FilePickerResult?> pickImage() async {
+  final image = await FilePicker.platform.pickFiles(
+    type: FileType.image,
+  );
+
+  return image;
 }

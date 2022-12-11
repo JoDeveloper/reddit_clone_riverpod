@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:reddit_clone_riverpod/core/constants/constants.dart';
+import 'package:reddit_clone_riverpod/core/failer.dart';
+import 'package:reddit_clone_riverpod/core/providers/storage_repository_proivder.dart';
+import 'package:reddit_clone_riverpod/core/type_def.dart';
 import 'package:reddit_clone_riverpod/core/utils.dart';
 import 'package:reddit_clone_riverpod/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone_riverpod/features/community/repository/community_repository.dart';
@@ -8,9 +14,11 @@ import 'package:reddit_clone_riverpod/models/community_model.dart';
 import 'package:routemaster/routemaster.dart';
 
 /// Creating a provider for the CommunityController class.
-final communityControllerProvider = StateNotifierProvider<CommunityController, bool>((ref) {
+final communityControllerProvider =
+    StateNotifierProvider<CommunityController, bool>((ref) {
   return CommunityController(
     communityRepository: ref.watch(communityRepositoryProvider),
+    storageRepository: ref.watch(storageRepositoryProvider),
     ref: ref,
   );
 });
@@ -21,19 +29,29 @@ final getUserCommunityProvider = StreamProvider<List<Community>>((ref) {
 });
 
 /// A provider that takes a string as a parameter and returns a stream of Community objects.
-final getCommunitybyNameProvider = StreamProvider.family<Community,String>((ref,name) {
-  return ref.watch(communityControllerProvider.notifier).getCommunityByName(name);
+final getCommunityByNameProvider =
+    StreamProvider.family<Community, String>((ref, name) {
+  return ref
+      .watch(communityControllerProvider.notifier)
+      .getCommunityByName(name);
 });
+
+final searchCommunityProvider = StreamProvider.family<List<Community>, String>(
+    (ref, query) =>
+        ref.watch(communityControllerProvider.notifier).searchCommunity(query));
 
 /// The CommunityController is a state notifier that takes a CommunityRepository and a Ref as
 /// parameters.
 class CommunityController extends StateNotifier<bool> {
   final CommunityRepository _repository;
+  final StorageRepository _storageRepository;
   final Ref _ref;
   CommunityController({
     required CommunityRepository communityRepository,
+    required StorageRepository storageRepository,
     required Ref ref,
   })  : _repository = communityRepository,
+        _storageRepository = storageRepository,
         _ref = ref,
         super(false);
 
@@ -76,9 +94,66 @@ class CommunityController extends StateNotifier<bool> {
     );
   }
 
+  Stream<List<Community>> searchCommunity(String query) =>
+      _repository.searchCommunity(query);
+
   /// This function returns a stream of a list of communities that the user is a member of.
   Stream<List<Community>> getUserCommunities() {
     final uid = _ref.read(userProvider)!.uid;
     return _repository.getUserCommunities(uid);
+  }
+
+  void editCommunity(
+      {required Community community,
+      required File? bannerImage,
+      required File? profileImage,
+      required BuildContext context}) async {
+    state = true;
+    if (profileImage != null) {
+      final profile = await _storageRepository.storeFile(
+          path: 'communities/profile', id: community.name, file: profileImage);
+      profile.fold(
+        (error) => showSnackBar(context, error.message),
+        (image) => community.copyWith(avatar: image),
+      );
+    }
+
+    if (bannerImage != null) {
+      final banner = await _storageRepository.storeFile(
+          path: 'communities/banner', id: community.name, file: bannerImage);
+      banner.fold(
+        (error) => showSnackBar(context, error.message),
+        (image) => community.copyWith(banner: image),
+      );
+    }
+
+    final res = await _repository.editCommunity(community);
+
+    state = false;
+    res.fold(
+      (error) => showSnackBar(context, error.message),
+      (_) => Routemaster.of(context).pop(),
+    );
+  }
+
+  void joinOrLeaveCommunity(Community community, BuildContext context) async {
+    final uid = _ref.read(userProvider)!.uid;
+    Either<Failer, void> res;
+    if (community.members.contains(uid)) {
+      res = await _repository.leaveCommunity(community.name, uid);
+    } else {
+      res = await _repository.joinCommunity(community.name, uid);
+    }
+
+    res.fold(
+      (failer) => showSnackBar(context, failer.message),
+      (_) {
+        if (community.members.contains(uid)){
+          showSnackBar(context, '${community.name} Left successfully');
+        }else{
+          showSnackBar(context, '${community.name} Joined successfully');
+        }
+      },
+    );
   }
 }

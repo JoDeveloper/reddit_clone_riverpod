@@ -43,11 +43,11 @@ class CommunityListDrawer extends ConsumerWidget {
                     child: ListView.builder(
                       itemCount: communities.length,
                       itemBuilder: ((context, index) {
-                        final comunity = communities[index];
+                        final community = communities[index];
                         return ListTile(
-                          title: Text('r/${comunity.name}'),
-                          leading: CircleAvatar(backgroundImage: NetworkImage(comunity.avatar)),
-                          onTap: () => navigateToCommunityScreen(comunity.name, context),
+                          title: Text('r/${community.name}'),
+                          leading: CircleAvatar(backgroundImage: NetworkImage(community.avatar)),
+                          onTap: () => navigateToCommunityScreen(community.name, context),
                         );
                       }),
                     ),
