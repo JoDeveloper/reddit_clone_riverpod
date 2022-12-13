@@ -8,7 +8,7 @@ class ModToolsScreen extends ConsumerWidget {
   const ModToolsScreen({required this.name, Key? key}) : super(key: key);
 
   void goToEditCommunity(BuildContext context) {
-    Routemaster.of(context).push('${RouteNames.editComunity}/$name');
+    Routemaster.of(context).push('${RouteNames.editCommunity}/$name');
   }
 
   void goToAddMod(BuildContext context) {
