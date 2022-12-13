@@ -46,6 +46,10 @@ class _Community extends ConsumerWidget {
     Routemaster.of(context).push('${RouteNames.modTools}/${community.name}');
   }
 
+  void joinCommunity(WidgetRef ref){
+    ref.read(communityControllerProvider.notifier).joinOrLeaveCommunity(community, ref.context);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return NestedScrollView(
@@ -104,9 +108,7 @@ class _Community extends ConsumerWidget {
                               child: const Text('Mod Tools'),
                             )
                           : OutlinedButton(
-                              onPressed: () => ref
-                                  .watch(communityControllerProvider.notifier)
-                                  .joinOrLeaveCommunity(community,context),
+                              onPressed: () => joinCommunity(ref),
                               style: OutlinedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),

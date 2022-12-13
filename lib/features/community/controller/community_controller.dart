@@ -6,7 +6,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:reddit_clone_riverpod/core/constants/constants.dart';
 import 'package:reddit_clone_riverpod/core/failer.dart';
 import 'package:reddit_clone_riverpod/core/providers/storage_repository_proivder.dart';
-import 'package:reddit_clone_riverpod/core/type_def.dart';
 import 'package:reddit_clone_riverpod/core/utils.dart';
 import 'package:reddit_clone_riverpod/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone_riverpod/features/community/repository/community_repository.dart';
@@ -148,12 +147,21 @@ class CommunityController extends StateNotifier<bool> {
     res.fold(
       (failer) => showSnackBar(context, failer.message),
       (_) {
-        if (community.members.contains(uid)){
-          showSnackBar(context, '${community.name} Left successfully');
-        }else{
-          showSnackBar(context, '${community.name} Joined successfully');
+        if (community.members.contains(uid)) {
+          showSnackBar(context, 'you left ${community.name} successfully');
+        } else {
+          showSnackBar(context, 'you Joined ${community.name}  successfully');
         }
       },
+    );
+  }
+
+  void addModsCommunity(
+      String communityName, List<String> ids, BuildContext context) async {
+    final res = await _repository.addModsCommunity(communityName, ids);
+    res.fold(
+      (failer) => showSnackBar(context,failer.message),
+      (r) => Routemaster.of(context).pop(),
     );
   }
 }

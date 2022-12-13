@@ -11,8 +11,8 @@ class ModToolsScreen extends ConsumerWidget {
     Routemaster.of(context).push('${RouteNames.editComunity}/$name');
   }
 
-  void goToModTools(BuildContext context) {
-    Routemaster.of(context).push('${RouteNames.modTools}/$name');
+  void goToAddMod(BuildContext context) {
+    Routemaster.of(context).push('${RouteNames.addModsScreen}/$name');
   }
 
   @override
@@ -24,7 +24,7 @@ class ModToolsScreen extends ConsumerWidget {
           ListTile(
             title: const Text('Add moderators'),
             leading: const Icon(Icons.add_moderator),
-            onTap: () => goToModTools(context),
+            onTap: () => goToAddMod(context),
           ),
           ListTile(
             title: const Text('Edit Community'),

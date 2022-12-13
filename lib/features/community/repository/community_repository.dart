@@ -130,4 +130,16 @@ class CommunityRepository {
       return left(Failer(e.toString()));
     }
   }
+
+  FutureVoid addModsCommunity(String communityName, List<String> ids) async {
+    try {
+      return right(_communityRef.doc(communityName).update({
+        'mods':ids,
+      }));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failer(e.toString()));
+    }
+  }
 }
