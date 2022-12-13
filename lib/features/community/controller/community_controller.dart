@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:reddit_clone_riverpod/core/constants/constants.dart';
 import 'package:reddit_clone_riverpod/core/failer.dart';
-import 'package:reddit_clone_riverpod/core/providers/storage_repository_proivder.dart';
+import 'package:reddit_clone_riverpod/core/providers/storage_repository_provider.dart';
 import 'package:reddit_clone_riverpod/core/utils.dart';
 import 'package:reddit_clone_riverpod/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone_riverpod/features/community/repository/community_repository.dart';

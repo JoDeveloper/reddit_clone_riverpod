@@ -14,7 +14,9 @@ class UserProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
     return Scaffold(
-      appBar: AppBar(title: Text(user.name)),
+      appBar: AppBar(
+        title: Text(user.name),
+      ),
       body: ref.watch(getUserDataProvider(uid)).when(
             data: (user) => _UserInfoSection(user: user!),
             error: (error, stackTrace) => ErrorText(error: error.toString()),
