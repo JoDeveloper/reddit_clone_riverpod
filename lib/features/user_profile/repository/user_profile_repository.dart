@@ -23,6 +23,13 @@ class UserProfileRepository {
   CollectionReference get _usersRef =>
       _fireStroe.collection(FireBaseConsts.usersCollection);
 
+  /// It takes a user object, and updates the user's profile in the database
+  /// 
+  /// Args:
+  ///   user (UserModel): UserModel
+  /// 
+  /// Returns:
+  ///   A FutureVoid is being returned.
   FutureVoid editUserProfile(UserModel user) async {
     try {
       return right(

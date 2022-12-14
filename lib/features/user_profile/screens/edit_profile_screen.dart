@@ -27,6 +27,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   File? bannerImage;
   File? profileImage;
   late TextEditingController nameController;
+
   @override
   void initState() {
     nameController = TextEditingController(text: ref.read(userProvider)!.name);

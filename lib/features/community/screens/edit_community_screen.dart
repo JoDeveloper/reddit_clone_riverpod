@@ -13,6 +13,7 @@ import 'package:reddit_clone_riverpod/theme/pallete.dart';
 
 class EditCommunityScreen extends ConsumerStatefulWidget {
   final String name;
+
   const EditCommunityScreen({
     required this.name,
     super.key,
@@ -26,6 +27,7 @@ class EditCommunityScreen extends ConsumerStatefulWidget {
 class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
   File? bannerImage;
   File? profileImage;
+
   void selectBannerImage() async {
     final res = await pickImage();
     if (res == null) return;

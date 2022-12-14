@@ -13,8 +13,7 @@ import 'package:reddit_clone_riverpod/models/community_model.dart';
 import 'package:routemaster/routemaster.dart';
 
 /// Creating a provider for the CommunityController class.
-final communityControllerProvider =
-    StateNotifierProvider<CommunityController, bool>((ref) {
+final communityControllerProvider = StateNotifierProvider<CommunityController, bool>((ref) {
   return CommunityController(
     communityRepository: ref.watch(communityRepositoryProvider),
     storageRepository: ref.watch(storageRepositoryProvider),
@@ -28,16 +27,14 @@ final getUserCommunityProvider = StreamProvider<List<Community>>((ref) {
 });
 
 /// A provider that takes a string as a parameter and returns a stream of Community objects.
-final getCommunityByNameProvider =
-    StreamProvider.family<Community, String>((ref, name) {
-  return ref
-      .watch(communityControllerProvider.notifier)
-      .getCommunityByName(name);
+final getCommunityByNameProvider = StreamProvider.family<Community, String>((ref, name) {
+  return ref.watch(communityControllerProvider.notifier).getCommunityByName(name);
 });
 
+/// A provider that takes a string as a parameter and returns a stream of Community objects.
 final searchCommunityProvider = StreamProvider.family<List<Community>, String>(
-    (ref, query) =>
-        ref.watch(communityControllerProvider.notifier).searchCommunity(query));
+  (ref, query) => ref.watch(communityControllerProvider.notifier).searchCommunity(query),
+);
 
 /// The CommunityController is a state notifier that takes a CommunityRepository and a Ref as
 /// parameters.
@@ -93,8 +90,11 @@ class CommunityController extends StateNotifier<bool> {
     );
   }
 
-  Stream<List<Community>> searchCommunity(String query) =>
-      _repository.searchCommunity(query);
+  /// This function takes a string and returns a stream of lists of communities.
+  /// 
+  /// Args:
+  ///   query (String): The query string to search for.
+  Stream<List<Community>> searchCommunity(String query) => _repository.searchCommunity(query);
 
   /// This function returns a stream of a list of communities that the user is a member of.
   Stream<List<Community>> getUserCommunities() {
@@ -102,15 +102,17 @@ class CommunityController extends StateNotifier<bool> {
     return _repository.getUserCommunities(uid);
   }
 
-  void editCommunity(
-      {required Community community,
-      required File? bannerImage,
-      required File? profileImage,
-      required BuildContext context}) async {
+  /// This function is used to edit a community
+  /// 
+  /// Args:
+  ///   community (Community): Community
+  ///   bannerImage (File): File?
+  ///   profileImage (File): File?
+  ///   context (BuildContext): BuildContext
+  void editCommunity({required Community community, required File? bannerImage, required File? profileImage, required BuildContext context}) async {
     state = true;
     if (profileImage != null) {
-      final profile = await _storageRepository.storeFile(
-          path: 'communities/profile', id: community.name, file: profileImage);
+      final profile = await _storageRepository.storeFile(path: 'communities/profile', id: community.name, file: profileImage);
       profile.fold(
         (error) => showSnackBar(context, error.message),
         (image) => community.copyWith(avatar: image),
@@ -118,8 +120,7 @@ class CommunityController extends StateNotifier<bool> {
     }
 
     if (bannerImage != null) {
-      final banner = await _storageRepository.storeFile(
-          path: 'communities/banner', id: community.name, file: bannerImage);
+      final banner = await _storageRepository.storeFile(path: 'communities/banner', id: community.name, file: bannerImage);
       banner.fold(
         (error) => showSnackBar(context, error.message),
         (image) => community.copyWith(banner: image),
@@ -135,6 +136,12 @@ class CommunityController extends StateNotifier<bool> {
     );
   }
 
+  /// It takes a community and a context, and if the user is a member of the community, it leaves the
+  /// community, otherwise it joins the community
+  /// 
+  /// Args:
+  ///   community (Community): is the community object that is passed to the function
+  ///   context (BuildContext): BuildContext
   void joinOrLeaveCommunity(Community community, BuildContext context) async {
     final uid = _ref.read(userProvider)!.uid;
     Either<Failer, void> res;
@@ -156,11 +163,18 @@ class CommunityController extends StateNotifier<bool> {
     );
   }
 
-  void addModsCommunity(
-      String communityName, List<String> ids, BuildContext context) async {
+  /// It takes a community name, a list of ids, and a context, and then it calls the repository to add
+  /// the mods to the community, and then it either shows a snackbar with the error message or it pops
+  /// the current route
+  /// 
+  /// Args:
+  ///   communityName (String): The name of the community
+  ///   ids (List<String>): List of mod ids
+  ///   context (BuildContext): BuildContext
+  void addModsCommunity(String communityName, List<String> ids, BuildContext context) async {
     final res = await _repository.addModsCommunity(communityName, ids);
     res.fold(
-      (failer) => showSnackBar(context,failer.message),
+      (failer) => showSnackBar(context, failer.message),
       (r) => Routemaster.of(context).pop(),
     );
   }

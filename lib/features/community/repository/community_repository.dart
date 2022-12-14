@@ -97,6 +97,14 @@ class CommunityRepository {
     }
   }
 
+  /// It takes a community object, and updates the document in the firestore database with the same name
+  /// as the community object
+  /// 
+  /// Args:
+  ///   community (Community): Community
+  /// 
+  /// Returns:
+  ///   A Future of Either&lt;Failer, void&gt;
   FutureVoid editCommunity(Community community) async {
     try {
       return right(_communityRef.doc(community.name).update(community.toMap()));
@@ -107,6 +115,15 @@ class CommunityRepository {
     }
   }
 
+  /// It takes a community name and a user id, and adds the user id to the members array of the
+  /// community
+  /// 
+  /// Args:
+  ///   name (String): The name of the community
+  ///   uid (String): The user's unique id
+  /// 
+  /// Returns:
+  ///   A FutureVoid is being returned.
   FutureVoid joinCommunity(String name, String uid) async {
     try {
       return right(_communityRef.doc(name).update({
@@ -119,6 +136,14 @@ class CommunityRepository {
     }
   }
 
+  /// It removes the user's uid from the community's members array
+  /// 
+  /// Args:
+  ///   name (String): The name of the community
+  ///   uid (String): user id
+  /// 
+  /// Returns:
+  ///   A FutureVoid is being returned.
   FutureVoid leaveCommunity(String name, String uid) async {
     try {
       return right(_communityRef.doc(name).update({
@@ -131,6 +156,14 @@ class CommunityRepository {
     }
   }
 
+  /// It takes a community name and a list of ids and adds them to the mods list of the community
+  /// 
+  /// Args:
+  ///   communityName (String): The name of the community
+  ///   ids (List<String>): List of user ids
+  /// 
+  /// Returns:
+  ///   A FutureVoid is being returned.
   FutureVoid addModsCommunity(String communityName, List<String> ids) async {
     try {
       return right(_communityRef.doc(communityName).update({
