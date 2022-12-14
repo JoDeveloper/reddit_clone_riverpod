@@ -23,7 +23,7 @@ class EditProfileScreen extends ConsumerStatefulWidget {
       _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends ConsumerState<ConsumerStatefulWidget> {
+class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   File? bannerImage;
   File? profileImage;
   late TextEditingController nameController;
