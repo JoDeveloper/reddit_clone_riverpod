@@ -9,7 +9,7 @@ import 'package:reddit_clone_riverpod/models/user_model.dart';
 
 
 /// Creating a provider for the UserProfileController.
-final communityControllerProvider =
+final userControllerProvider =
     StateNotifierProvider<UserProfileController, bool>((ref) {
   return UserProfileController(
     userProfileRepository: ref.watch(userProfileRepositoryProvider),

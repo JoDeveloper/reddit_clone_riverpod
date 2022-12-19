@@ -8,6 +8,7 @@ import 'package:reddit_clone_riverpod/features/auth/controller/auth_controller.d
 import 'package:reddit_clone_riverpod/firebase_options.dart';
 import 'package:reddit_clone_riverpod/models/user_model.dart';
 import 'package:reddit_clone_riverpod/route.dart';
+import 'package:reddit_clone_riverpod/theme/pallete.dart';
 import 'package:routemaster/routemaster.dart';
 
 void main() async {
@@ -44,7 +45,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           data: (data) => MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'Reddit Tutorial',
-            // theme: ref.watch(themeNotifierProvider),
+            theme: ref.watch(themeNotifierProvider),
             routerDelegate: RoutemasterDelegate(
               routesBuilder: (context) {
                 if (data != null) {
